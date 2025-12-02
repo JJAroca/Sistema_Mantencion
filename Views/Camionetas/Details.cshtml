@@ -1,0 +1,151 @@
+@model SistemaMantencion.Models.Camioneta
+
+@{
+    ViewData["Title"] = "Detalles Camioneta";
+}
+
+<h1>🔍 Detalles de Camioneta</h1>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h4>Información General</h4>
+            </div>
+            <div class="card-body">
+                <dl class="row">
+                    <dt class="col-sm-4">Patente:</dt>
+                    <dd class="col-sm-8"><strong>@Model.Patente</strong></dd>
+                    
+                    <dt class="col-sm-4">Marca:</dt>
+                    <dd class="col-sm-8">@Model.Marca</dd>
+                    
+                    <dt class="col-sm-4">Modelo:</dt>
+                    <dd class="col-sm-8">@Model.Modelo</dd>
+                    
+                    <dt class="col-sm-4">Año:</dt>
+                    <dd class="col-sm-8">@Model.Anio</dd>
+                    
+                    <dt class="col-sm-4">Kilometraje:</dt>
+                    <dd class="col-sm-8">@Model.Kilometraje.ToString("N0") km</dd>
+                    
+                    <dt class="col-sm-4">Estado:</dt>
+                    <dd class="col-sm-8">
+                        @if (Model.Estado == "Disponible")
+                        {
+                            <span class="badge bg-success">@Model.Estado</span>
+                        }
+                        else if (Model.Estado == "EnArriendo")
+                        {
+                            <span class="badge bg-warning">En Arriendo</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-danger">En Mantención</span>
+                        }
+                    </dd>
+                    
+                    <dt class="col-sm-4">Fecha Registro:</dt>
+                    <dd class="col-sm-8">@Model.FechaRegistro.ToString("dd/MM/yyyy")</dd>
+                    
+                    <dt class="col-sm-4">Última Mantención:</dt>
+                    <dd class="col-sm-8">
+                        @if (Model.FechaUltimaMantencion.HasValue)
+                        {
+                            @Model.FechaUltimaMantencion.Value.ToString("dd/MM/yyyy")
+                        }
+                        else
+                        {
+                            <span class="text-muted">Sin mantenciones</span>
+                        }
+                    </dd>
+                </dl>
+            </div>
+        </div>
+        
+        <div class="mt-3">
+            <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Editar</a>
+            <a asp-action="CambiarEstado" asp-route-id="@Model.Id" class="btn btn-secondary">Cambiar Estado</a>
+            <a asp-action="Index" class="btn btn-outline-primary">Volver al Listado</a>
+        </div>
+    </div>
+    
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header bg-secondary text-white">
+                <h4>📋 Historial Reciente</h4>
+            </div>
+            <div class="card-body">
+                @if (ViewBag.Historial != null && ViewBag.Historial.Count > 0)
+                {
+                    <div class="list-group">
+                        @foreach (var h in ViewBag.Historial)
+                        {
+                            <div class="list-group-item">
+                                <div class="d-flex w-100 justify-content-between">
+                                    <h6 class="mb-1">@h.Accion</h6>
+                                    <small>@h.Fecha.ToString("dd/MM/yyyy HH:mm")</small>
+                                </div>
+                                <p class="mb-1"><small>@h.Motivo</small></p>
+                                @if (h.EstadoAnterior != null)
+                                {
+                                    <small class="text-muted">
+                                        Estado: @h.EstadoAnterior → @h.EstadoNuevo
+                                    </small>
+                                }
+                                @if (h.KilometrajeAnterior != null && h.KilometrajeAnterior > 0)
+                                {
+                                    <br/>
+                                    <small class="text-muted">
+                                        Km: @h.KilometrajeAnterior?.ToString("N0") 
+                                        @if (h.KilometrajeNuevo != null && h.KilometrajeNuevo > 0)
+                                        {
+                                            <text>→ @h.KilometrajeNuevo?.ToString("N0")</text>
+                                        }
+                                    </small>
+                                }
+                            </div>
+                        }
+                    </div>
+                }
+                else
+                {
+                    <p class="text-muted">No hay historial registrado</p>
+                }
+            </div>
+        </div>
+        
+        <div class="card mt-3">
+            <div class="card-header bg-info text-white">
+                <h4>🔧 Mantenciones</h4>
+            </div>
+            <div class="card-body">
+                @if (Model.Mantenciones != null && Model.Mantenciones.Any())
+                {
+                    <ul class="list-unstyled">
+                        @foreach (var m in Model.Mantenciones.OrderByDescending(x => x.FechaInicio).Take(5))
+                        {
+                            <li class="mb-2">
+                                <strong>@m.TipoMantencion</strong> - @m.FechaInicio.ToString("dd/MM/yyyy")
+                                <br/>
+                                <small class="text-muted">@m.Descripcion</small>
+                                @if (m.Estado == "Completada")
+                                {
+                                    <span class="badge bg-success">Completada</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-warning">En Proceso</span>
+                                }
+                            </li>
+                        }
+                    </ul>
+                }
+                else
+                {
+                    <p class="text-muted">Sin mantenciones registradas</p>
+                }
+            </div>
+        </div>
+    </div>
+</div>

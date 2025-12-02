@@ -1,0 +1,111 @@
+syntax = "proto3";
+
+option csharp_namespace = "ArriendoGrpc";
+
+package arriendo;
+
+// Servicio que expone Sistema de Mantención
+service MantencionService {
+  rpc ObtenerCamionetasDisponibles (Empty) returns (CamionetasResponse);
+  rpc ObtenerCamioneta (CamionetaRequest) returns (CamionetaResponse);
+  rpc SolicitarRetiroCamioneta (RetiroRequest) returns (RetiroResponse);
+  rpc ReintegrarCamioneta (ReintegroRequest) returns (ReintegroResponse);
+  rpc ActualizarKilometraje (KilometrajeRequest) returns (KilometrajeResponse);
+}
+
+// Servicio que expone Sistema Comercial
+service ArriendoService {
+  rpc RegistrarArriendo (ArriendoRequest) returns (ArriendoResponse);
+  rpc FinalizarArriendo (FinalizarArriendoRequest) returns (ArriendoResponse);
+  rpc ObtenerArriendosActivos (Empty) returns (ArriendosActivosResponse);
+}
+
+message Empty {}
+
+// Mensajes para Mantención
+message CamionetasResponse {
+  repeated CamionetaInfo camionetas = 1;
+}
+
+message CamionetaInfo {
+  int32 id = 1;
+  string patente = 2;
+  string marca = 3;
+  string modelo = 4;
+  int32 kilometraje = 5;
+  string estado = 6;
+}
+
+message CamionetaRequest {
+  int32 id = 1;
+}
+
+message CamionetaResponse {
+  bool success = 1;
+  string message = 2;
+  CamionetaInfo camioneta = 3;
+}
+
+message RetiroRequest {
+  int32 camionetaId = 1;
+  string motivo = 2;
+}
+
+message RetiroResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+message ReintegroRequest {
+  int32 camionetaId = 1;
+  int32 kilometrajeActual = 2;
+}
+
+message ReintegroResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+message KilometrajeRequest {
+  int32 camionetaId = 1;
+  int32 kilometraje = 2;
+}
+
+message KilometrajeResponse {
+  bool success = 1;
+  string message = 2;
+}
+
+// Mensajes para Arriendos
+message ArriendoRequest {
+  int32 clienteId = 1;
+  int32 camionetaId = 2;
+  string fechaInicio = 3;
+  string fechaFin = 4;
+  int32 kilometrajeInicial = 5;
+}
+
+message ArriendoResponse {
+  bool success = 1;
+  string message = 2;
+  int32 arriendoId = 3;
+}
+
+message FinalizarArriendoRequest {
+  int32 arriendoId = 1;
+  int32 kilometrajeFinal = 2;
+}
+
+message ArriendosActivosResponse {
+  repeated ArriendoInfo arriendos = 1;
+}
+
+message ArriendoInfo {
+  int32 id = 1;
+  int32 camionetaId = 2;
+  string patenteReplace = 3;
+  int32 clienteId = 4;
+  string nombreCliente = 5;
+  string fechaInicio = 6;
+  string fechaFin = 7;
+}

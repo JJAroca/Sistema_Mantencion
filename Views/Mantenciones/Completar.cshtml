@@ -1,0 +1,78 @@
+@model SistemaMantencion.Models.RegistroMantencion
+
+@{
+    ViewData["Title"] = "Completar Mantención";
+}
+
+<h1>✅ Completar Mantención #@Model.Id</h1>
+
+<hr />
+
+<div class="row">
+    <div class="col-md-6">
+        <h4>Información de la Mantención</h4>
+        <dl class="row">
+            <dt class="col-sm-5">Camioneta:</dt>
+            <dd class="col-sm-7">@Model.Camioneta.Patente - @Model.Camioneta.Marca @Model.Camioneta.Modelo</dd>
+            
+            <dt class="col-sm-5">Tipo:</dt>
+            <dd class="col-sm-7">@Model.TipoMantencion</dd>
+            
+            <dt class="col-sm-5">Fecha Inicio:</dt>
+            <dd class="col-sm-7">@Model.FechaInicio.ToString("dd/MM/yyyy HH:mm")</dd>
+            
+            <dt class="col-sm-5">Kilometraje:</dt>
+            <dd class="col-sm-7">@Model.KilometrajeRegistrado.ToString("N0") km</dd>
+            
+            <dt class="col-sm-5">Descripción:</dt>
+            <dd class="col-sm-7">@Model.Descripcion</dd>
+        </dl>
+    </div>
+    
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Completar Mantención</h5>
+                <form asp-action="Completar" method="post">
+                    <input type="hidden" name="id" value="@Model.Id" />
+                    
+                    <div class="form-group mb-3">
+                        <label for="costo" class="control-label">Costo de la Mantención ($)</label>
+                        <input type="number" 
+                               name="costo" 
+                               id="costo" 
+                               class="form-control" 
+                               min="0" 
+                               step="1000"
+                               placeholder="0" />
+                    </div>
+                    
+                    <div class="form-group mb-3">
+                        <label for="observaciones" class="control-label">Observaciones</label>
+                        <textarea name="observaciones" 
+                                  id="observaciones" 
+                                  class="form-control" 
+                                  rows="4"
+                                  placeholder="Detalles de los trabajos realizados..."></textarea>
+                    </div>
+                    
+                    <div class="alert alert-success">
+                        <strong>✅ Al completar:</strong> 
+                        <ul>
+                            <li>La mantención quedará registrada como completada</li>
+                            <li>La camioneta volverá a estado "Disponible"</li>
+                            <li>Se actualizará la fecha de última mantención</li>
+                        </ul>
+                    </div>
+                    
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-success">
+                            ✅ Confirmar Completación
+                        </button>
+                        <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,75 @@
+@model SistemaMantencion.Models.RegistroMantencion
+
+@{
+    ViewData["Title"] = "Eliminar Mantención";
+}
+
+<h1>🗑️ Eliminar Registro de Mantención</h1>
+
+<div class="alert alert-danger">
+    <h4>⚠️ ¿Está seguro que desea eliminar este registro de mantención?</h4>
+    <p>Esta acción no se puede deshacer.</p>
+</div>
+
+<div class="card">
+    <div class="card-body">
+        <dl class="row">
+            <dt class="col-sm-4">ID:</dt>
+            <dd class="col-sm-8">#@Model.Id</dd>
+            
+            <dt class="col-sm-4">Camioneta:</dt>
+            <dd class="col-sm-8">@Model.Camioneta.Patente - @Model.Camioneta.Marca @Model.Camioneta.Modelo</dd>
+            
+            <dt class="col-sm-4">Tipo:</dt>
+            <dd class="col-sm-8">@Model.TipoMantencion</dd>
+            
+            <dt class="col-sm-4">Fecha Inicio:</dt>
+            <dd class="col-sm-8">@Model.FechaInicio.ToString("dd/MM/yyyy HH:mm")</dd>
+            
+            <dt class="col-sm-4">Fecha Fin:</dt>
+            <dd class="col-sm-8">
+                @if (Model.FechaFin.HasValue)
+                {
+                    @Model.FechaFin.Value.ToString("dd/MM/yyyy HH:mm")
+                }
+                else
+                {
+                    <span class="text-muted">En proceso</span>
+                }
+            </dd>
+            
+            <dt class="col-sm-4">Estado:</dt>
+            <dd class="col-sm-8">
+                @if (Model.Estado == "EnProceso")
+                {
+                    <span class="badge bg-warning">En Proceso</span>
+                }
+                else
+                {
+                    <span class="badge bg-success">Completada</span>
+                }
+            </dd>
+            
+            <dt class="col-sm-4">Costo:</dt>
+            <dd class="col-sm-8">
+                @if (Model.Costo.HasValue)
+                {
+                    <text>$@Model.Costo.Value.ToString("N0")</text>
+                }
+                else
+                {
+                    <span class="text-muted">No registrado</span>
+                }
+            </dd>
+            
+            <dt class="col-sm-4">Descripción:</dt>
+            <dd class="col-sm-8">@Model.Descripcion</dd>
+        </dl>
+    </div>
+</div>
+
+<form asp-action="Delete" method="post" class="mt-3">
+    <input type="hidden" asp-for="Id" />
+    <button type="submit" class="btn btn-danger">Confirmar Eliminación</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+</form>

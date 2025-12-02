@@ -1,0 +1,42 @@
+﻿@{
+    ViewData["Title"] = "Inicio";
+}
+
+<div class="text-center">
+    <h1 class="display-4">Sistema de Mantención</h1>
+    <p class="lead">Gestión de flota y mantenciones</p>
+</div>
+
+<div class="row mt-5">
+    <div class="col-md-6">
+        <div class="card text-center shadow">
+            <div class="card-body">
+                <h3 class="card-title">🚙 Camionetas</h3>
+                <p class="card-text">Administra la flota de camionetas</p>
+                <a asp-controller="Camionetas" asp-action="Index" class="btn btn-success">Ver Camionetas</a>
+                <a asp-controller="Camionetas" asp-action="Create" class="btn btn-primary">Agregar Camioneta</a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6">
+        <div class="card text-center shadow">
+            <div class="card-body">
+                <h3 class="card-title">🔧 Mantenciones</h3>
+                <p class="card-text">Registra y gestiona las mantenciones</p>
+                <a asp-controller="Mantenciones" asp-action="Index" class="btn btn-success">Ver Mantenciones</a>
+                <a asp-controller="Mantenciones" asp-action="Create" class="btn btn-primary">Nueva Mantención</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-12">
+        <div class="alert alert-success">
+            <h5>ℹ️ Información del Sistema</h5>
+            <p><strong>Sistema de Mantención</strong> - Puerto: 7002 (HTTPS) / 5002 (HTTP)</p>
+            <p><strong>Servidor gRPC activo</strong> - Esperando conexiones del Sistema Comercial</p>
+        </div>
+    </div>
+</div>
