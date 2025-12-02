@@ -37,31 +37,6 @@ namespace SistemaMantencion.Models
         public ICollection<RegistroMantencion> Mantenciones { get; set; } = new List<RegistroMantencion>();
     }
 
-    public class RegistroMantencion
-    {
-        public int Id { get; set; }
-        
-        public int CamionetaId { get; set; }
-        public Camioneta Camioneta { get; set; } = null!;
-        
-        public DateTime FechaInicio { get; set; } = DateTime.Now;
-        
-        public DateTime? FechaFin { get; set; }
-        
-        [Required]
-        public string TipoMantencion { get; set; } = string.Empty; // Preventiva, Correctiva, Revision
-        
-        public string? Descripcion { get; set; }
-        
-        public int KilometrajeRegistrado { get; set; }
-        
-        public decimal? Costo { get; set; }
-        
-        public string Estado { get; set; } = "EnProceso"; // EnProceso, Completada
-        
-        public string? Observaciones { get; set; }
-    }
-
     public class HistorialCamioneta
     {
         public int Id { get; set; }

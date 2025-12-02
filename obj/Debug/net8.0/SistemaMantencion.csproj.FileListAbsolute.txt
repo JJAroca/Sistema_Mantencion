@@ -132,3 +132,4 @@ C:\Users\tatin\Desktop\Proyecto2\SistemaArriendoCamionetas\SistemaMantencion\obj
 C:\Users\tatin\Desktop\Proyecto2\SistemaArriendoCamionetas\SistemaMantencion\obj\Debug\net8.0\SistemaMantencion.pdb
 C:\Users\tatin\Desktop\Proyecto2\SistemaArriendoCamionetas\SistemaMantencion\obj\Debug\net8.0\SistemaMantencion.genruntimeconfig.cache
 C:\Users\tatin\Desktop\Proyecto2\SistemaArriendoCamionetas\SistemaMantencion\obj\Debug\net8.0\ref\SistemaMantencion.dll
+C:\Users\tatin\Desktop\Proyecto2\SistemaArriendoCamionetas\SistemaMantencion\obj\Debug\net8.0\SistemaMantencion.sourcelink.json

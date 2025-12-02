@@ -16,16 +16,25 @@
         <dl class="row">
             <dt class="col-sm-4">ID:</dt>
             <dd class="col-sm-8">#@Model.Id</dd>
-            
+
             <dt class="col-sm-4">Camioneta:</dt>
-            <dd class="col-sm-8">@Model.Camioneta.Patente - @Model.Camioneta.Marca @Model.Camioneta.Modelo</dd>
-            
+            <dd class="col-sm-8">
+                @if (Model.Camioneta != null)
+                {
+                    @($"{Model.Camioneta.Patente} - {Model.Camioneta.Marca} {Model.Camioneta.Modelo}")
+                }
+                else
+                {
+                    <span class="text-danger">Camioneta no disponible</span>
+                }
+            </dd>
+
             <dt class="col-sm-4">Tipo:</dt>
             <dd class="col-sm-8">@Model.TipoMantencion</dd>
-            
+
             <dt class="col-sm-4">Fecha Inicio:</dt>
             <dd class="col-sm-8">@Model.FechaInicio.ToString("dd/MM/yyyy HH:mm")</dd>
-            
+
             <dt class="col-sm-4">Fecha Fin:</dt>
             <dd class="col-sm-8">
                 @if (Model.FechaFin.HasValue)
@@ -37,7 +46,7 @@
                     <span class="text-muted">En proceso</span>
                 }
             </dd>
-            
+
             <dt class="col-sm-4">Estado:</dt>
             <dd class="col-sm-8">
                 @if (Model.Estado == "EnProceso")
@@ -49,7 +58,7 @@
                     <span class="badge bg-success">Completada</span>
                 }
             </dd>
-            
+
             <dt class="col-sm-4">Costo:</dt>
             <dd class="col-sm-8">
                 @if (Model.Costo.HasValue)
@@ -61,7 +70,7 @@
                     <span class="text-muted">No registrado</span>
                 }
             </dd>
-            
+
             <dt class="col-sm-4">Descripción:</dt>
             <dd class="col-sm-8">@Model.Descripcion</dd>
         </dl>

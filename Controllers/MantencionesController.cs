@@ -53,7 +53,28 @@ namespace SistemaMantencion.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create(RegistroMantencion mantencion)
         {
-            if (ModelState.IsValid)
+            Console.WriteLine("========== CREATE MANTENCION ==========");
+            Console.WriteLine($"CamionetaId: {mantencion.CamionetaId}");
+            Console.WriteLine($"TipoMantencion: {mantencion.TipoMantencion}");
+            Console.WriteLine($"ModelState.IsValid: {ModelState.IsValid}");
+            
+            if (!ModelState.IsValid)
+            {
+                Console.WriteLine("ERRORES DE VALIDACIÓN:");
+                foreach (var error in ModelState.Values.SelectMany(v => v.Errors))
+                {
+                    Console.WriteLine($"- {error.ErrorMessage}");
+                }
+                
+                ViewBag.Camionetas = new SelectList(
+                    await _context.Camionetas.ToListAsync(), 
+                    "Id", 
+                    "Patente");
+                ViewBag.TiposMantenciones = new[] { "Preventiva", "Correctiva", "Revision" };
+                return View(mantencion);
+            }
+
+            try
             {
                 var camioneta = await _context.Camionetas.FindAsync(mantencion.CamionetaId);
                 
@@ -82,9 +103,21 @@ namespace SistemaMantencion.Controllers
                     _context.Historial.Add(historial);
                     await _context.SaveChangesAsync();
 
+                    Console.WriteLine("✅ MANTENCION GUARDADA EXITOSAMENTE");
                     TempData["Success"] = "Mantención registrada exitosamente";
                     return RedirectToAction(nameof(Index));
                 }
+                else
+                {
+                    Console.WriteLine("❌ CAMIONETA NO ENCONTRADA");
+                    ModelState.AddModelError("", "Camioneta no encontrada");
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"❌ ERROR: {ex.Message}");
+                Console.WriteLine($"StackTrace: {ex.StackTrace}");
+                ModelState.AddModelError("", $"Error al guardar: {ex.Message}");
             }
 
             ViewBag.Camionetas = new SelectList(
@@ -126,26 +159,29 @@ namespace SistemaMantencion.Controllers
 
             mantencion.FechaFin = DateTime.Now;
             mantencion.Estado = "Completada";
-            mantencion.Costo = costo;
-            mantencion.Observaciones = observaciones;
+            mantencion.Costo = costo ?? 0m;
+            mantencion.Observaciones = observaciones ?? string.Empty;
 
             // Cambiar estado de camioneta a Disponible
             var camioneta = mantencion.Camioneta;
-            camioneta.Estado = "Disponible";
-            camioneta.FechaUltimaMantencion = DateTime.Now;
-
-            // Registrar historial
-            var historial = new HistorialCamioneta
+            if (camioneta != null)
             {
-                CamionetaId = camioneta.Id,
-                Accion = "FinMantencion",
-                Motivo = $"Mantención completada: {mantencion.TipoMantencion}",
-                EstadoAnterior = "EnMantencion",
-                EstadoNuevo = "Disponible"
-            };
+                camioneta.Estado = "Disponible";
+                camioneta.FechaUltimaMantencion = DateTime.Now;
 
-            _context.Historial.Add(historial);
-            await _context.SaveChangesAsync();
+                // Registrar historial
+                var historial = new HistorialCamioneta
+                {
+                    CamionetaId = camioneta.Id,
+                    Accion = "FinMantencion",
+                    Motivo = $"Mantención completada: {mantencion.TipoMantencion}",
+                    EstadoAnterior = "EnMantencion",
+                    EstadoNuevo = "Disponible"
+                };
+
+                _context.Historial.Add(historial);
+                await _context.SaveChangesAsync();
+            }
 
             TempData["Success"] = "Mantención completada exitosamente";
             return RedirectToAction(nameof(Index));
