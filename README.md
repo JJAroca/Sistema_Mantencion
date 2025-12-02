@@ -125,7 +125,7 @@ Edita `appsettings.json` y cambia el puerto:
 
 ## 👥 Autores
 
-Juan José Aroca - Universidad Católica del Norte
+JuanJosé Aroca- Diego Beluzaran - Universidad Católica del Norte
 
 ## 📅 Proyecto
 
