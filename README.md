@@ -137,7 +137,7 @@ dotnet dev-certs https --trust
 
 ## 👥 Autores
 
-Juan José Aroca - Universidad Católica del Norte
+JuanJosé Aroca - Diego Beluzaran - Universidad Católica del Norte
 
 ## 📅 Proyecto
 
